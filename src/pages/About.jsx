@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
   HiOutlineStatusOnline, HiOutlineAcademicCap, HiOutlineOfficeBuilding,
   HiOutlineLocationMarker, HiOutlineMail, HiOutlinePhone, HiOutlineClock,
@@ -11,13 +12,13 @@ import SectionLabel from '../components/SectionLabel';
 import Badge from '../components/Badge';
 
 const PERSONAL = [
-  { icon: <HiOutlineStatusOnline />,      label: 'STATUS',      value: INFO.status,      cls: 'text-green-400' },
-  { icon: <HiOutlineAcademicCap />,       label: 'DEGREE',      value: INFO.degree },
-  { icon: <HiOutlineOfficeBuilding />,    label: 'INSTITUTION', value: INFO.institution },
-  { icon: <HiOutlineLocationMarker />,    label: 'LOCATION',    value: INFO.location },
-  { icon: <HiOutlineMail />,              label: 'EMAIL',       value: INFO.email,       cls: 'text-[var(--blue)]' },
-  { icon: <HiOutlinePhone />,             label: 'PHONE',       value: INFO.phone },
-  { icon: <HiOutlineClock />,             label: 'RESPONSE',    value: INFO.response },
+  { icon: <HiOutlineStatusOnline />,   label: 'STATUS',      value: INFO.status,      cls: 'text-green-400' },
+  { icon: <HiOutlineAcademicCap />,    label: 'DEGREE',      value: INFO.degree },
+  { icon: <HiOutlineOfficeBuilding />, label: 'INSTITUTION', value: INFO.institution },
+  { icon: <HiOutlineLocationMarker />, label: 'LOCATION',    value: INFO.location },
+  { icon: <HiOutlineMail />,           label: 'EMAIL',       value: INFO.email,       cls: 'text-[var(--blue)]' },
+  { icon: <HiOutlinePhone />,          label: 'PHONE',       value: INFO.phone },
+  { icon: <HiOutlineClock />,          label: 'RESPONSE',    value: INFO.response },
 ];
 
 const SOCIALS = [
@@ -42,13 +43,13 @@ const BORDER_COLOR = {
 };
 
 export default function About() {
-  const go = id => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const navigate = useNavigate();
 
   return (
-    <section id="about" className="sec bg-[#0c0f1a]">
+    <section className="sec bg-[#0c0f1a]">
       <div className="max-w-6xl mx-auto">
 
-        {/* ── HERO INTRO ── */}
+        {/* HERO INTRO */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-10 mb-20">
           <div className="flex-1">
             <Reveal>
@@ -85,10 +86,8 @@ export default function About() {
           </Reveal>
         </div>
 
-        {/* ── BACKGROUND + PHOTO + PERSONAL INFO ── */}
+        {/* BACKGROUND + PHOTO + PERSONAL INFO */}
         <div className="flex flex-col lg:flex-row gap-10 mb-20">
-
-          {/* Left: story */}
           <div className="flex-1">
             <Reveal>
               <SectionLabel>my story</SectionLabel>
@@ -101,7 +100,6 @@ export default function About() {
                 </Reveal>
               ))}
             </div>
-            {/* Traits */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {TRAITS.map((t, i) => (
                 <Reveal key={t.title} delay={0.1 + i * 0.08}>
@@ -115,7 +113,6 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right: photo + info */}
           <div className="flex flex-col gap-5 w-full lg:w-80 shrink-0">
             <Reveal>
               <div className="relative rounded-2xl overflow-hidden">
@@ -160,7 +157,7 @@ export default function About() {
           </div>
         </div>
 
-        {/* ── TECHNICAL SKILLS ── */}
+        {/* TECHNICAL SKILLS */}
         <div className="mb-20">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
             <Reveal>
@@ -173,7 +170,6 @@ export default function About() {
               </p>
             </Reveal>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SKILLS.map((group, gi) => (
               <Reveal key={group.category} delay={gi * 0.07}>
@@ -193,7 +189,7 @@ export default function About() {
           </div>
         </div>
 
-        {/* ── TIMELINE ── */}
+        {/* TIMELINE */}
         <div>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
             <Reveal>
@@ -208,14 +204,11 @@ export default function About() {
           </div>
 
           <div className="relative pl-10">
-            {/* Vertical line */}
             <div className="absolute left-3.5 top-0 bottom-0 w-px bg-gradient-to-b from-[var(--blue)] via-[var(--purple)] to-[var(--teal)]" />
-
             <div className="flex flex-col gap-6">
               {TIMELINE.map((item, i) => (
                 <Reveal key={item.title} delay={i * 0.1}>
                   <div className="relative">
-                    {/* Dot */}
                     <div className={`absolute -left-[1.85rem] top-2 w-3 h-3 rounded-full ${DOT_COLOR[item.color] || 'bg-blue-500'} border-2 border-[#0c0f1a] ring-2 ring-white/10`} />
                     <div className={`glass rounded-2xl p-5 transition-all ${BORDER_COLOR[item.color]}`}>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
@@ -239,16 +232,16 @@ export default function About() {
           </div>
         </div>
 
-        {/* ── CTAs ── */}
+        {/* CTAs */}
         <Reveal className="flex flex-wrap justify-center gap-4 mt-16">
           <button
-            onClick={() => go('contact')}
+            onClick={() => navigate('/contact')}
             className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-[var(--blue)] to-[var(--purple)] text-white font-semibold text-sm hover:opacity-90 hover:scale-105 transition-all active:scale-95 min-h-[44px] cursor-pointer"
           >
             Let's Connect →
           </button>
           <button
-            onClick={() => go('projects')}
+            onClick={() => navigate('/projects')}
             className="flex items-center gap-2 px-8 py-3 rounded-xl glass border border-white/10 text-slate-300 font-semibold text-sm hover:border-[var(--blue)]/40 hover:text-white transition-all hover:scale-105 active:scale-95 min-h-[44px] cursor-pointer"
           >
             View My Projects →

@@ -17,10 +17,6 @@ const CARD_COLOR = {
   pink:   'from-pink-600/15 to-pink-600/5   border-pink-500/15   hover:border-pink-500/35',
 };
 
-const BADGE_COLOR = {
-  blue: 'blue', purple: 'purple', teal: 'teal', orange: 'orange', pink: 'pink',
-};
-
 export default function Projects() {
   const [active, setActive] = useState('All');
 
@@ -28,7 +24,7 @@ export default function Projects() {
   const filtered  = active === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === active);
 
   return (
-    <section id="projects" className="sec">
+    <section className="sec pt-28">
       <div className="max-w-6xl mx-auto">
 
         <Reveal>
@@ -39,7 +35,7 @@ export default function Projects() {
           </p>
         </Reveal>
 
-        {/* ── Featured ── */}
+        {/* Featured */}
         {featured.length > 0 && (
           <div className="mb-14">
             <Reveal>
@@ -83,7 +79,7 @@ export default function Projects() {
                   </div>
                   <p className="text-[var(--muted)] text-sm leading-relaxed mb-5">{p.desc}</p>
                   <div className="flex flex-wrap gap-2">
-                    {p.tech.map(t => <Badge key={t} label={t} color={BADGE_COLOR[p.color]} />)}
+                    {p.tech.map(t => <Badge key={t} label={t} color={p.color} />)}
                   </div>
                 </div>
               </Reveal>
@@ -91,7 +87,7 @@ export default function Projects() {
           </div>
         )}
 
-        {/* ── Filter tabs ── */}
+        {/* Filter tabs */}
         <Reveal>
           <div className="flex flex-wrap gap-2 mb-8">
             {FILTERS.map(f => (
@@ -109,7 +105,7 @@ export default function Projects() {
           </div>
         </Reveal>
 
-        {/* ── Cards grid ── */}
+        {/* Cards grid */}
         <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence>
             {filtered.map((p, i) => (
@@ -119,7 +115,6 @@ export default function Projects() {
                 exit={{ opacity: 0, scale: 0.92 }} transition={{ delay: i * 0.06 }}
                 className={`glass rounded-2xl overflow-hidden bg-gradient-to-br ${CARD_COLOR[p.color]} border transition-all duration-300 hover:-translate-y-2 flex flex-col`}
               >
-                {/* Card header */}
                 <div className="h-36 flex items-center justify-center relative">
                   <span className="text-5xl">{p.emoji}</span>
                   {p.status && (
@@ -133,7 +128,6 @@ export default function Projects() {
                     </div>
                   )}
                 </div>
-
                 <div className="p-5 flex flex-col flex-1">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <h3 className="text-white font-bold text-base leading-snug">{p.title}</h3>
@@ -143,7 +137,7 @@ export default function Projects() {
                   </div>
                   <p className="text-[var(--muted)] text-xs leading-relaxed mb-4 flex-1">{p.desc}</p>
                   <div className="flex flex-wrap gap-1.5 mb-4">
-                    {p.tech.map(t => <Badge key={t} label={t} color={BADGE_COLOR[p.color]} />)}
+                    {p.tech.map(t => <Badge key={t} label={t} color={p.color} />)}
                   </div>
                   <div className="flex gap-3 pt-3 border-t border-white/5">
                     {p.github ? (

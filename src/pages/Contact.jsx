@@ -41,7 +41,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="sec bg-[#0c0f1a]">
+    <section className="sec pt-28 bg-[#0c0f1a]">
       <div className="max-w-6xl mx-auto">
 
         <Reveal>
@@ -54,10 +54,8 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
 
-          {/* ── Left: info ── */}
+          {/* Left: info */}
           <div className="lg:col-span-2 flex flex-col gap-5">
-
-            {/* Status banner */}
             <Reveal>
               <div className="glass rounded-2xl p-5 border border-green-500/15">
                 <div className="flex items-center gap-2 mb-2">
@@ -70,7 +68,6 @@ export default function Contact() {
               </div>
             </Reveal>
 
-            {/* Info cards */}
             <div className="grid grid-cols-1 gap-3">
               {INFO_CARDS.map((item, i) => (
                 <Reveal key={item.label} delay={i * 0.07}>
@@ -94,7 +91,6 @@ export default function Contact() {
               ))}
             </div>
 
-            {/* Socials */}
             <Reveal delay={0.2}>
               <div className="glass rounded-2xl p-5">
                 <p className="mono text-[10px] text-[var(--muted)] uppercase tracking-widest mb-4">Find me on</p>
@@ -110,7 +106,7 @@ export default function Contact() {
             </Reveal>
           </div>
 
-          {/* ── Right: form ── */}
+          {/* Right: form */}
           <motion.form
             initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6 }}

@@ -2,31 +2,28 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { HiSun, HiMoon } from 'react-icons/hi2';
+import { Link, useLocation } from 'react-router-dom';
 import { INFO } from '../data/data';
 import { useTheme } from '../App';
 
-const LINKS = ['home', 'about', 'projects', 'contact'];
+const LINKS = [
+  { label: 'Home',     path: '/' },
+  { label: 'About',    path: '/about' },
+  { label: 'Projects', path: '/projects' },
+  { label: 'Contact',  path: '/contact' },
+];
 
 export default function Navbar() {
   const [open, setOpen]         = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive]     = useState('home');
   const { theme, toggle }       = useTheme();
+  const { pathname }            = useLocation();
   const isLight                 = theme === 'light';
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', fn);
     return () => window.removeEventListener('scroll', fn);
-  }, []);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => e.isIntersecting && setActive(e.target.id)),
-      { threshold: 0.4 }
-    );
-    LINKS.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
-    return () => obs.disconnect();
   }, []);
 
   useEffect(() => {
@@ -40,10 +37,8 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  const go = id => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    setOpen(false);
-  };
+  // close drawer on route change
+  useEffect(() => { setOpen(false); }, [pathname]);
 
   const navBg = scrolled
     ? isLight
@@ -51,14 +46,20 @@ export default function Navbar() {
       : 'bg-[#0a0d14]/80 backdrop-blur-xl border-b border-white/[0.06] shadow-lg shadow-black/30'
     : 'bg-transparent';
 
-  const activeText  = isLight ? 'text-[var(--blue)]' : 'text-white';
-  const mutedText   = isLight ? 'text-slate-500 hover:text-slate-900' : 'text-[var(--muted)] hover:text-white';
-  const pillBg      = isLight ? 'bg-[var(--blue)]/10' : 'bg-white/[0.06]';
-  const borderBtn   = isLight ? 'border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-400' : 'border-white/10 text-[var(--muted)] hover:text-white hover:border-white/20';
-  const drawerBg    = isLight ? 'bg-white/95 backdrop-blur-xl border-b border-black/[0.06]' : 'bg-[#0d1117]/95 backdrop-blur-xl border-b border-white/[0.06]';
-  const drawerItem  = (id) => active === id
-    ? `bg-[var(--blue)]/10 text-[var(--blue)]`
-    : isLight ? 'text-slate-500 hover:text-slate-900 hover:bg-black/[0.04]' : 'text-[var(--muted)] hover:text-white hover:bg-white/[0.04]';
+  const activeText = isLight ? 'text-[var(--blue)]' : 'text-white';
+  const mutedText  = isLight ? 'text-slate-500 hover:text-slate-900' : 'text-[var(--muted)] hover:text-white';
+  const pillBg     = isLight ? 'bg-[var(--blue)]/10' : 'bg-white/[0.06]';
+  const borderBtn  = isLight
+    ? 'border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-400'
+    : 'border-white/10 text-[var(--muted)] hover:text-white hover:border-white/20';
+  const drawerBg   = isLight
+    ? 'bg-white/95 backdrop-blur-xl border-b border-black/[0.06]'
+    : 'bg-[#0d1117]/95 backdrop-blur-xl border-b border-white/[0.06]';
+  const drawerItem = (path) => pathname === path
+    ? 'bg-[var(--blue)]/10 text-[var(--blue)]'
+    : isLight
+      ? 'text-slate-500 hover:text-slate-900 hover:bg-black/[0.04]'
+      : 'text-[var(--muted)] hover:text-white hover:bg-white/[0.04]';
 
   return (
     <motion.header
@@ -70,32 +71,32 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <button onClick={() => go('home')} className="mono text-sm sm:text-base font-bold shrink-0 select-none cursor-pointer">
+        <Link to="/" className="mono text-sm sm:text-base font-bold shrink-0 select-none cursor-pointer">
           <span className="text-[var(--blue)]">&lt;</span>
           <span className="grad-text">Sujit</span>
           <span className="text-[var(--muted)]">.Dev</span>
           <span className="text-[var(--blue)]">/&gt;</span>
-        </button>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
-          {LINKS.map(id => (
-            <button
-              key={id}
-              onClick={() => go(id)}
-              className={`relative px-4 py-2 text-sm font-medium capitalize cursor-pointer transition-colors duration-200 rounded-lg ${
-                active === id ? activeText : mutedText
+          {LINKS.map(({ label, path }) => (
+            <Link
+              key={path}
+              to={path}
+              className={`relative px-4 py-2 text-sm font-medium cursor-pointer transition-colors duration-200 rounded-lg ${
+                pathname === path ? activeText : mutedText
               }`}
             >
-              {active === id && (
+              {pathname === path && (
                 <motion.span
                   layoutId="pill"
                   className={`absolute inset-0 rounded-lg ${pillBg}`}
                   transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                 />
               )}
-              <span className="relative z-10">{id.charAt(0).toUpperCase() + id.slice(1)}</span>
-            </button>
+              <span className="relative z-10">{label}</span>
+            </Link>
           ))}
         </nav>
 
@@ -178,19 +179,18 @@ export default function Navbar() {
               className={`md:hidden relative z-50 ${drawerBg}`}
             >
               <div className="max-w-6xl mx-auto px-5 py-3 flex flex-col gap-1">
-                {LINKS.map(id => (
-                  <button
-                    key={id}
-                    onClick={() => go(id)}
-                    className={`flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl text-sm font-medium capitalize transition-all cursor-pointer ${drawerItem(id)}`}
+                {LINKS.map(({ label, path }) => (
+                  <Link
+                    key={path}
+                    to={path}
+                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer ${drawerItem(path)}`}
                   >
-                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${active === id ? 'bg-[var(--blue)]' : 'bg-current opacity-30'}`} />
-                    {id.charAt(0).toUpperCase() + id.slice(1)}
-                  </button>
+                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${pathname === path ? 'bg-[var(--blue)]' : 'bg-current opacity-30'}`} />
+                    {label}
+                  </Link>
                 ))}
                 <a
                   href={`mailto:${INFO.email}`}
-                  onClick={() => setOpen(false)}
                   className="mt-1 mb-1 py-3 rounded-xl text-sm font-semibold text-center bg-gradient-to-r from-[var(--blue)] to-[var(--purple)] text-white hover:opacity-90 transition-opacity"
                 >
                   Hire Me

@@ -1,9 +1,16 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FaGithub, FaFacebook, FaInstagram, FaArrowUp, FaHeart } from 'react-icons/fa';
 import { HiOutlineMail, HiOutlineLocationMarker } from 'react-icons/hi';
 import { INFO } from '../data/data';
 
-const LINKS = ['home', 'about', 'projects', 'contact'];
+const LINKS = [
+  { label: 'Home',     path: '/' },
+  { label: 'About',    path: '/about' },
+  { label: 'Projects', path: '/projects' },
+  { label: 'Contact',  path: '/contact' },
+];
+
 const SOCIALS = [
   { icon: <FaGithub />,    href: INFO.github,    label: 'GitHub' },
   { icon: <FaFacebook />,  href: INFO.facebook,  label: 'Facebook' },
@@ -11,8 +18,6 @@ const SOCIALS = [
 ];
 
 export default function Footer() {
-  const go = id => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-
   return (
     <footer className="bg-[#0c0f1a] border-t border-white/5 pt-14 pb-6 px-5 sm:px-8">
       <div className="max-w-6xl mx-auto">
@@ -42,12 +47,12 @@ export default function Footer() {
           <div>
             <p className="mono text-[10px] text-[var(--muted)] uppercase tracking-widest mb-4">Navigation</p>
             <ul className="space-y-2.5">
-              {LINKS.map(l => (
-                <li key={l}>
-                  <button onClick={() => go(l)}
+              {LINKS.map(({ label, path }) => (
+                <li key={path}>
+                  <Link to={path}
                     className="text-sm text-[var(--muted)] hover:text-[var(--blue)] transition-colors capitalize cursor-pointer flex items-center gap-1.5">
-                    <span className="text-[var(--blue)] text-xs">›</span> {l}
-                  </button>
+                    <span className="text-[var(--blue)] text-xs">›</span> {label}
+                  </Link>
                 </li>
               ))}
             </ul>
